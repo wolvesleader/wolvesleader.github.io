@@ -18,7 +18,12 @@
   </head>
   <body id="bg" >
 
-   
+   <div class="container" style="font-family:Consolas;padding:30px;border:3px solid #8DD4FF;box-shadow:3px 3px 6px #ccc;">
+  		问题描述：使用ViewPager+ViewPagerIndicator+FragmentPagerAdapter搭建的主界面，当ViewPager滑动到最后一个，按返回键的时候直接就会退出主界面，我理想的是，当在最后一个的时候按返回键的时候回退到前一个Fragment中，在按返回键的时候再次回退到上一个，当在第一个Fragment的时候按返回键的时候直接退出主界面。
+   </div>
+   <div class="container" style="font-family:Consolas;padding:30px;border:3px solid #8DD4FF;box-shadow:3px 3px 6px #ccc;">
+  		解决方法：拦截onBackPressed通过判断ViewPager当前显示的是第几个，来设置
+   </div>
 
    <div class="container" style="font-family:Consolas;padding:30px;border:3px solid #8DD4FF;box-shadow:3px 3px 6px #ccc;">
   		问题描述：在使用listview的时候在一些情况下，我们需要点击listview的item给它设置背景颜色，这个背景颜色不是点击时候设置颜色，手放开时候又回到原来的颜色，而是，点击之后设置一个颜色，保持这个颜色不变，当再次点击的时候才会恢复到原理的颜色，但是如果你不使用listview的复用机制不会出现问题，当你使用了复用机制之后，问题就会出现了，例如：你点击listview的第一个item给他设置颜色为绿色，当你滑动的时候下边也会出现相同颜色的item但是你是没有点击这个item的，目前换没有找到合适的解决方案。
