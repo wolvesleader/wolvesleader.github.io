@@ -85,7 +85,10 @@
 
 
              <div style="font-family:Consolas;font-size:22px">
-                在使用listview的时候在一些情况下，我们需要点击listview的item给它设置背景颜色，这个背景颜色不是点击时候设置颜色，手放开时候又回到原来的颜色，而是，点击之后设置一个颜色，保持这个颜色不变，当再次点击的时候才会恢复到原理的颜色，但是如果你不使用listview的复用机制不会出现问题，当你使用了复用机制之后，问题就会出现了，例如：你点击listview的第一个item给他设置颜色为绿色，当你滑动的时候下边也会出现相同颜色的item但是你是没有点击这个item的.
+                android获取屏幕尺寸包括可见屏幕尺寸和如果手机含有虚拟
+                Rect frame = new Rect();    
+                getWindow().getDecorView().getWindowVisibleDisplayFrame(frame); 
+                不考虑屏幕的分辨率只计算屏幕的可见区域
             </div>
             <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
 
