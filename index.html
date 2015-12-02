@@ -27,7 +27,7 @@
 
   <div class="container" style="font-family:Consolas;padding:30px;border:2px solid #8DD4FF;box-shadow:3px 3px 6px #ccc;">
     <div class="row">
-        <div class="col-md-4" style="font-size:20px">
+        <div class="col-md-4" style="font-size:20px;border-right: 1px #8DD4FF dashed;">
           <p>苗   清</p>
           <p>english name : quincy</p>
           <p>QQ:924106277</p>
@@ -47,107 +47,8 @@
           <p>您发现我博客中存在错误，或者有您不明白的地方，可以通过上面的联系方式联系我</p>
           <p>您发现我有侵权的行为，请及时的联系我</p>
         </div>
-        <div class="col-md-8" style="border-left: 1px #8DD4FF dashed;padding:20px">
-            <a href="page1/page1.html" style="font-family:Consolas;font-size:25px">这是我的第一篇博客，先来说说，搭建博客的原因和过程</a>
-
-             <div style="font-family:Consolas;font-size:25px;color:#F9263E;margin-bottom:10px;">
-               问题描述：
-             </div>
-             <div style="font-family:Consolas;font-size:22px">
-                使用ViewPager+ViewPagerIndicator+FragmentPagerAdapter搭建的主界面，当ViewPager滑动到最后一个，按返回键的时候直接就会退出主界面，我理想的是，当在最后一个的时候按返回键的时候回退到前一个Fragment中，在按返回键的时候再次回退到上一个，当在第一个Fragment的时候按返回键的时候直接退出主界面。
-            </div>
-
-             <div style="font-family:Consolas;font-size:25px;color:#319E1B;margin-bottom:10px;">
-               解决方法：
-             </div>
-             <div style="font-family:Consolas;font-size:22px">
-                拦截onBackPressed通过判断ViewPager当前显示的是第几个，来设置
-             </div>
-              <div style="font-family:Consolas;font-size:22px;margin-bottom:10px;">
-                <a href="https://github.com/wolvesleader/android_study/tree/master/ViewPagerFragment" style="font-family:Consolas;font-size:25px">demo下载地址</a>
-             </div>
-
-             <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
-
-
-             <div style="font-family:Consolas;font-size:25px;color:#F9263E;margin-bottom:10px;">
-               问题描述：
-             </div>
-             <div style="font-family:Consolas;font-size:22px">
-                在使用listview的时候在一些情况下，我们需要点击listview的item给它设置背景颜色，这个背景颜色不是点击时候设置颜色，手放开时候又回到原来的颜色，而是，点击之后设置一个颜色，保持这个颜色不变，当再次点击的时候才会恢复到原理的颜色，但是如果你不使用listview的复用机制不会出现问题，当你使用了复用机制之后，问题就会出现了，例如：你点击listview的第一个item给他设置颜色为绿色，当你滑动的时候下边也会出现相同颜色的item但是你是没有点击这个item的.
-            </div>
-             <div style="font-family:Consolas;font-size:25px;color:#319E1B;margin-bottom:10px;">
-               解决方法：
-             </div>
-             <div style="font-family:Consolas;font-size:22px">
-                给每一个item都设置一个boolean通过这个判断，在设置颜色显示.
-             </div>
-              <div style="font-family:Consolas;font-size:22px;margin-bottom:10px;">
-                <a href="https://github.com/wolvesleader/android_study/tree/master/SetColorForListView" style="font-family:Consolas;font-size:25px">demo下载地址</a>
-             </div>
-             <div style="margin-top:20px;padding-bottom:10px;border-bottom: 1px #8DD4FF dashed ;"></div>
-
-
-             <div style="font-family:Consolas;font-size:22px;margin-top:10px;">
-                android获取屏幕尺寸包括可见屏幕尺寸和如果手机含有虚拟按键<br>
-                 Rect frame = new Rect();    
-                getWindow().getDecorView().getWindowVisibleDisplayFrame(frame)
-                不考虑屏幕的分辨率只计算屏幕的可见区域
-            </div>
-            <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
-
-            <div style="font-family:Consolas;font-size:22px;margin-top:10px;">
-                禁止ListView的点击事件：<br>
-                  @Override<br>
-                  public boolean areAllItemsEnabled() {<br>
-                  &nbsp;&nbsp;return false;<br>
-                  }<br>
-                  @Override<br>
-                  public boolean isEnabled(int position) {<br>
-                  &nbsp;&nbsp;return false;<br>
-                  }<br>
-            </div>
-            <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
-
-            <div style="font-family:Consolas;font-size:22px;margin-top:10px;">
-               listview设置虚线的分割线写在item布局文件的最后<br>
-               <pre >
-               &lt;View
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/repeat_bg"/&gt;
-                </pre>
-              自定义repeat_bg.xml文件<br>
-              <pre>
-              &lt;?xml version="1.0" encoding="utf-8"?>
-              &lt;bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:src="@drawable/dotted_line"
-                  android:tileMode="repeat" />
-              </pre>
-                对listview的设置<br>
-                android:listSelector="@android:color/transparent"
-                android:footerDividersEnabled="false"<br>
-                这样，在最后一个item的时候底部也会多出一条虚线，可以做一下判断，如果是item的最后一个把view给影藏掉
-            </div>
-            <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
-
-            <div style="font-family:Consolas;font-size:22px;margin-top:10px;">
-               RadioGroup+RadioButton+ViewPage搭建主页面的原因
-               RadioGroup+RadioButton是单选的一个控件，这样在做切换的时候，可以根据滑动当前的RadioButton设置控件的背景和颜色
-            </div>
-            <div style="font-family:Consolas;font-size:22px;margin-bottom:10px;">
-                <a href="https://github.com/wolvesleader/android_study/tree/master/MainFramwork" style="font-family:Consolas;font-size:25px">demo下载地址</a>
-             </div>
-            <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
-
-            <div style="font-family:Consolas;font-size:22px;margin-top:10px;">
-              百度地图获取市的坐标的接口
-              http://my.oschina.net/xiaogg/blog/298226
-            </div>
-            <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
-
-
+        <div class="col-md-8" style="padding:20px;padding-bottom:0px;padding-top:0px;">
+          <iframe frameborder="no"; style="height:1880px;width:100%;"src="index1.html" name="index"></iframe>
 
         </div>
 
