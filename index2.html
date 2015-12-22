@@ -1,95 +1,116 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <title>wolvesleader</title>
-  <link rel="stylesheet" href="stylesheets/bootstrap.min.css"></head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="chrome=1">
+	<title>wolvesleader</title>
+	<link rel="stylesheet" href="stylesheets/bootstrap.min.css"></head>
 <body >
 
-  <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
-    RadioGroup+RadioButton+ViewPage搭建主页面的原因
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		RadioGroup+RadioButton+ViewPage搭建主页面的原因
                RadioGroup+RadioButton是单选的一个控件，这样在做切换的时候，可以根据滑动当前的RadioButton设置控件的背景和颜色
-  </div>
-  <div style="font-family:Consolas;font-size:20px;margin-bottom:10px;">
-    <a href="https://github.com/wolvesleader/android_study/tree/master/MainFramwork" style="font-family:Consolas;font-size:25px" target="_blank">demo下载地址</a>
-  </div>
-  <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+	</div>
+	<div style="font-family:Consolas;font-size:20px;margin-bottom:10px;">
+		<a href="https://github.com/wolvesleader/android_study/tree/master/MainFramwork" style="font-family:Consolas;font-size:25px" target="_blank">demo下载地址</a>
+	</div>
+	<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
 
-  <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
-    百度地图获取市的坐标的接口
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		百度地图获取市的坐标的接口
               http://my.oschina.net/xiaogg/blog/298226
-  </div>
-  <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+	</div>
+	<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
 
-  <div style="font-family:Consolas;font-size:20px;margin-top:10px;color:#4CB948">
-    在启动的Activity中配置android:clearTaskOnLaunch="true" 的时候，当吧app退到后台之后，再次进入不会保留原来的内容。
-  </div>
-  <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;color:#4CB948">
+		在启动的Activity中配置android:clearTaskOnLaunch="true" 的时候，当吧app退到后台之后，再次进入不会保留原来的内容。
+	</div>
+	<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
 
-   <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
-    QQ分享如果图片是在内网服务器上的，分享图片会不成功，不显示图片
-  </div>
-  <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">QQ分享如果图片是在内网服务器上的，分享图片会不成功，不显示图片</div>
+	<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
 
-  <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
-    微信分享闪退，调出微信分享页面之后就闪退了。
-	原因比较离奇，估计是打包的问题，我换了个工作空间，从新打包安装就好了,<b style="color:red">签名文件特别需要注意，要使用官方的签名文件制作
-	工具类生成签名文件。</b>
-  </div>
-  <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		微信分享闪退，调出微信分享页面之后就闪退了。
+	原因比较离奇，估计是打包的问题，我换了个工作空间，从新打包安装就好了, <b style="color:red">签名文件特别需要注意，要使用官方的签名文件制作
+	工具类生成签名文件。</b> 
+	</div>
+	<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
 
-
- <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
-   我在集成微信分享的时候遇到了这个问题，就是我分享网页的时候，填写了一个跳转链接，在朋友圈点击我分享的内容之后跳转到一个网页，但是我发现链接多加了from=timeline&isappinstalled=1造成无法访问链接。
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		我在集成微信分享的时候遇到了这个问题，就是我分享网页的时候，填写了一个跳转链接，在朋友圈点击我分享的内容之后跳转到一个网页，但是我发现链接多加了from=timeline&isappinstalled=1造成无法访问链接。
    我原来的链接是
-   <pre >
+		<pre >
         http://www.autobobo.com/Shop/ShopPage?userid=EXzsRQ3GnhsHzIHj6Y3wNA.2015.12 
    </pre>
-  
-  分享到微信朋友圈，在朋友圈点击的时候链接就变成了这个
-   <pre >
+		分享到微信朋友圈，在朋友圈点击的时候链接就变成了这个
+		<pre >
         http://www.autobobo.com/Shop/ShopPage?userid=EXzsRQ3GnhsHzIHj6Y3wNA.2015.12&from=timeline&isappinstalled=1
    </pre>
-  后边多加了from=timeline&isappinstalled=1造成访问失败
-  </div>
-  <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+		后边多加了from=timeline&isappinstalled=1造成访问失败
+	</div>
+	<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
 
-  <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
-  
-我登录QQ了 然后分享QQ不管是成功，失败，返回都没事 没登录的情况下 我点击分享跳到QQ的登录页面
-然后我在返回回来的话就有个透明的activity 那个页面就直接卡住了 然后点击个home键又好了<br>
- QQ的SDK的问题，官方文档中有说明
-  </div>
-  <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		我登录QQ了 然后分享QQ不管是成功，失败，返回都没事 没登录的情况下 我点击分享跳到QQ的登录页面
+		然后我在返回回来的话就有个透明的activity 那个页面就直接卡住了 然后点击个home键又好了
+		<br>QQ的SDK的问题，官方文档中有说明</div>
+	<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
 
-   <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
-  	新浪微博取消分享的时候，在三星note3上，取消分享之后界面出现卡动。<br>
- 	微博的SDK版本太低了换到weiboSDKCore_3.1.2.jar这个版本就好了。
-  </div>
-  <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		新浪微博取消分享的时候，在三星note3上，取消分享之后界面出现卡动。
+		<br>微博的SDK版本太低了换到weiboSDKCore_3.1.2.jar这个版本就好了。</div>
+	<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
 
-  <nav>
-    <ul class="pager">
-      <li class="previous">
-        <a href="index1.html">
-          <span aria-hidden="true">&larr;</span>
-          上一页
-        </a>
-      </li>
-      <li class="next">
-        <a href="page1/page2.html">
-          下一页
-          <span aria-hidden="true">&rarr;</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		分享到QQ空间的图片路径为：
+		<pre >
+		http://img.pinkan.com/topic/20151214/145008037334649.jpg
+		</pre>
+		的时候分享到QQ空间不显示图片，但是在掉起QQ分享页面的时候显示该图片。
+		分享到QQ空间的图片路径为：
+		<pre >
+		http://img.pinkan.com//topic//20151214//145008037334649.jpg
+		</pre>
+		的时候分享到QQ空间显示图片。
 
-  <script src="javascripts/jquery-2.1.4.min.js"></script>
-  <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-  <script src="javascripts/bootstrap.min.js"></script>
-  <script src="javascripts/scale.fix.js"></script>
+		分享到QQ空间的图片路径为：
+		<pre >
+		http://pic.autobobo.com/
+		</pre>
+		的时候分享到QQ空间不显示图片，但是在掉起QQ分享页面的时候显示该图片，原因是：
+		<pre >
+		http://pic.autobobo.com/
+		路径中没有图片，这是图片服务器中找不到图片的时候，默认的要给设置一个图片，而默认的设置的图片的名字是default.png，所以把路径改为http://pic.autobobo.com//default.png就好了
+		</pre>
+		
+		总的来说不显示图片还是因为找不到图片引起的。
+		为这个的时候就会显示
+		<br>分享到空间的图片不显示。
+	</div>
+	<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+
+	<nav>
+		<ul class="pager">
+			<li class="previous">
+				<a href="index1.html">
+					<span aria-hidden="true">&larr;</span>
+					上一页
+				</a>
+			</li>
+			<li class="next">
+				<a href="page1/page2.html">
+					下一页
+					<span aria-hidden="true">&rarr;</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+
+	<script src="javascripts/jquery-2.1.4.min.js"></script>
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="javascripts/bootstrap.min.js"></script>
+	<script src="javascripts/scale.fix.js"></script>
 
 </body>
 </html>
