@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<meta http-equiv="X-UA-Compatible" content="chrome=1">
+	<title>wolvesleader</title>
+
+	<link rel="stylesheet" href="stylesheets/styles.css">
+	<link rel="stylesheet" href="stylesheets/github-light.css">
+	<link rel="stylesheet" href="stylesheets/index.css">
+
+	<link rel="stylesheet" href="stylesheets/bootstrap.min.css">
+
+	<meta name="viewport" content="width=device-width"></head>
+<body id="bg" >
+
+	<div class="container" style="font-family:Consolas;padding:30px;border:3px solid #8DD4FF;box-shadow:3px 3px 6px #ccc;">
+		
+		<h3>android架构专题之规范</h3>
+  		要谈规范必须首先要建立一个开发规范：
+  		有规范了才能提高代码的可读性，在后期的维护中也比较清晰
+  		<h4>1，控件的id命名规范</h4>
+  		
+  		layout中的id命名
+  		view缩写_模块名称_view的功能描述
+  		view的缩写：
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>控件</th>
+					<th>缩写</th>
+				
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">1</th>
+					<td>TextView</td>
+					<td>tv</td>
+			
+				</tr>
+				<tr>
+					<th scope="row">2</th>
+					<td>ImageView</td>
+					<td>iv</td>
+		
+				</tr>
+				<tr>
+					<th scope="row">3</th>
+					<td>CheckBox</td>
+					<td>cb</td>
+				</tr>
+
+				<tr>
+					<th scope="row">4</th>
+					<td>RadioButton</td>
+					<td>rbtn</td>
+				</tr>
+
+				<tr>
+					<th scope="row">5</th>
+					<td>EditText</td>
+					<td>et</td>
+				</tr>	
+
+				<tr>
+					<th scope="row">6</th>
+					<td>ListView</td>
+					<td>lv</td>
+				</tr>
+
+				<tr>
+					<th scope="row">7</th>
+					<td>ScollView</td>
+					<td>sv</td>
+				</tr>
+
+				<tr>
+					<th scope="row">8</th>
+					<td>WebView</td>
+					<td>wv</td>
+				</tr>
+
+				<tr>
+					<th scope="row">9</th>
+					<td>LinearLayout</td>
+					<td>ll</td>
+				</tr>
+
+				<tr>
+					<th scope="row">10</th>
+					<td>FrameLayout</td>
+					<td>fl</td>
+				</tr>
+
+				<tr>
+					<th scope="row">11</th>
+					<td>RelativeLayout</td>
+					<td>rl</td>
+				</tr>
+
+				<tr>
+					<th scope="row">12</th>
+					<td>Spinner</td>
+					<td>sp</td>
+				</tr>
+
+				<tr>
+					<th scope="row">13</th>
+					<td>RadioGroup</td>
+					<td>rg</td>
+				</tr>
+
+				<tr>
+					<th scope="row">14</th>
+					<td>ProgressBar</td>
+					<td>pb</td>
+				</tr>
+
+				<tr>
+					<th scope="row">15</th>
+					<td>ImageButton</td>
+					<td>ibtn</td>
+				</tr>
+
+				<tr>
+					<th scope="row">16</th>
+					<td>MapView</td>
+					<td>mv</td>
+				</tr>
+
+				<tr>
+					<th scope="row">17</th>
+					<td>HorizontalScrollView</td>
+					<td>hsv</td>
+				</tr>
+
+
+				<tr>
+					<th scope="row">18</th>
+					<td>TabHost</td>
+					<td>tabhost</td>
+				</tr>
+
+				<tr>
+					<th scope="row">19</th>
+					<td>TabWidget</td>
+					<td>tabs</td>
+				</tr>
+
+				<tr>
+					<th scope="row">20</th>
+					<td>View</td>
+					<td>view</td>
+				</tr>
+
+				<tr>
+					<th scope="row">21</th>
+					<td>GridView</td>
+					<td>gv</td>
+				</tr>
+
+				<tr>
+					<th scope="row">22</th>
+					<td>ViewPager</td>
+					<td>vp</td>
+				</tr>
+
+				<tr>
+					<th scope="row">23</th>
+					<td colspan="2" >自定义的控件命名规则和这些的相同</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<h4>2，代码中获取到页面的id之后的命名规则</h4>
+		例如获取TextView  tv_login_name;
+		private TextView  tv_login_name;变量名和页面的保持一致
+		<h4>3，方法的命名规则</h4>
+		<h4>4，常量的命名规则</h4>
+	</div>
+	<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+
+	<script src="javascripts/jquery-2.1.4.min.js"></script>
+
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="javascripts/bootstrap.min.js"></script>
+	<script src="javascripts/scale.fix.js"></script>
+
+</body>
+
+</html>
