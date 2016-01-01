@@ -49,6 +49,13 @@
    </pre>
 		后边多加了from=timeline&isappinstalled=1造成访问失败
 	</div>
+      <div style="font-family:Consolas;font-size:20px;color:#319E1B;margin-bottom:10px;">
+       解决方法以及原因：
+     </div>
+      <div style="font-family:Consolas;font-size:20px">
+        原因是微信的路径中有from参数，我们的服务器端的路径中也有一个参数是from，微信的from把我们的from携带的参数
+        给覆盖掉了，所以造成访问失败，解决办法，让服务器端的人把，from该为其他的参数就ok了。
+     </div>
 	<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
 
 	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
@@ -93,6 +100,68 @@
 		<br>分享到空间的图片不显示。
 	</div>
 	<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		自己实现分享，不使用第三方的自定义界面
+	</div>
+	<div style="font-family:Consolas;font-size:20px;margin-bottom:10px;">
+                <a href="https://github.com/wolvesleader/android_study/tree/master/ShareShow" style="font-family:Consolas;font-size:20px" target="_blank">demo下载地址</a>
+    </div>
+    <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		微信分享，需要打包运行才能唤起分享的界面，打包的签名文件是项目跟目录下的叫养车的这个文件
+	</div>
+	<div style="font-family:Consolas;font-size:20px;margin-bottom:10px;">
+                <a href="https://github.com/wolvesleader/android_study/tree/master/keepingcar" style="font-family:Consolas;font-size:20px" target="_blank">demo下载地址</a>
+    </div>
+        <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		微信分享官方的demo，运行的时候需要把自己的debug.keystore替换或者设置为官方提供的debug.keystore
+		如果覆盖掉自己的debug.keystore的时候一定要记得对自己的最一个备份。切记
+	</div>
+	<div style="font-family:Consolas;font-size:20px;margin-bottom:10px;">
+                <a href="https://github.com/wolvesleader/android_study/tree/master/amm_sdk_sample" style="font-family:Consolas;font-size:20px" target="_blank">demo下载地址</a>
+    </div>
+
+    <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		QQ分享，demo无需打包运行，如果是正式的项目需要打包运行才能唤起分享界面
+	</div>
+	<div style="font-family:Consolas;font-size:20px;margin-bottom:10px;">
+                <a href="https://github.com/wolvesleader/android_study/tree/master/MyShareQQ" style="font-family:Consolas;font-size:20px" target="_blank">demo下载地址</a>
+    </div>
+
+    <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		QQ分享官方的demo，demo无需打包运行，如果是正式的项目需要打包运行才能唤起分享界面
+	</div>
+	<div style="font-family:Consolas;font-size:20px;margin-bottom:10px;">
+                <a href="https://github.com/wolvesleader/android_study/tree/master/Truck_Inner_Sample" style="font-family:Consolas;font-size:20px" target="_blank">demo下载地址</a>
+    </div>
+
+    <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		微博分享，需要打包运行才能唤起分享的界面，打包的签名文件是项目跟目录下的叫我帮你养车的这个文件
+	</div>
+	<div style="font-family:Consolas;font-size:20px;margin-bottom:10px;">
+                <a href="https://github.com/wolvesleader/android_study/tree/master/MyKeepingCar" style="font-family:Consolas;font-size:20px" target="_blank">demo下载地址</a>
+    </div>
+    <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		微博分享官方的demo，运行的时候需要把自己的debug.keystore替换或者设置为官方提供的debug.keystore
+		如果覆盖掉自己的debug.keystore的时候一定要记得对自己的最一个备份。切记
+	</div>
+	<div style="font-family:Consolas;font-size:20px;margin-bottom:10px;">
+                <a href="https://github.com/wolvesleader/android_study/tree/master/WeiboSDKDemo" style="font-family:Consolas;font-size:20px" target="_blank">demo下载地址</a>
+    </div>
+    <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		微博分享官方的SDK
+	</div>
+    	<div style="font-family:Consolas;font-size:20px;margin-bottom:10px;">
+                <a href="https://github.com/wolvesleader/android_study/tree/master/WeiboSDKDemo" style="font-family:Consolas;font-size:20px" target="_blank">demo下载地址</a>
+    </div>
+
+     <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		总结一哈：总的来说使用非常简单，但是要做到兼容比较不容易，还存在一个问题，就是如果一个APP中
+		有多个地方使用到了分享，微信和QQ没有什么问题，微博就比较操蛋了，存在多个的情况，他会不执行回调接口，
+		解决这个问题的办法是把微博分享相关的写在一个透明的Activity中，哪里需需要分享，就启动透明的Activity.
+		还有如果需要考虑分享本地图片的情况，怎么弄，我换没有解决，如果谁有好的想法大家可以探讨一下。
+		到这里分享暂时告一段落。
+	</div>
 
 	<nav>
 		<ul class="pager">
