@@ -21,11 +21,75 @@
 	 百度地图根据市名获取该市所在的坐标，使用百度地图的GeoCoder必须要输入市名和一个具体的地址，我现在只想输入市名
 获取到该市的坐标</div>
 	<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">滑动冲突的解决方案</div>
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">方案1：采用外部拦截法</div>
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		<pre>
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent ev) {
+		boolean intercepted = false;
+		int x = (int) ev.getX();
+		int y = (int) ev.getY();
+		switch (ev.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			intercepted = false;
+			break;
+		case MotionEvent.ACTION_MOVE:
+			int dx = x - mLastXIntercept;
+			int dy = y - mLastYIntercept;
+			if(父容器需要当前点击事件的判断条件){
+				intercepted = true;
+			}else{
+				intercepted = false;
+			}
+			break;
+		case MotionEvent.ACTION_UP:
+			intercepted = false;
+			break;
+		default:
+			break;
+		}
 	
+		mLastXIntercept = x;
+		mLastYIntercept = y;		
+		return intercepted;
+	}
+		</pre>
+	</div>
+	<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+	
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		android中的布局参数<br/>
+		名称<font color="red">不</font>已layout_开头的属性作用于组件，组件生成时确定自己孩子摆放的位置<br>
+		名称<font color="red">已</font>layout_开头的属性作用于组件，组件生成时告诉父控件，自己摆放的位置
+	</div>
+
+    <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
 
 
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		<div>APP研发录读书笔记</div>
+		<div>android模块化开发和插件化开发</div>
+		<div>要做到模块化开发和插件化开发可以</div>
+		<div>第一步：建立AndroidLib类库，将与业务无关的逻辑转移到AndroidLib。
 
+		</div>
+	</div>
+
+    <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+
+
+	
+	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+		自定义类似于QQ图片上传的效果<br/>
+		有两种的方式，自一种自定义ProcessImageView<br/>
+		第二种设置两张图片叠加在一起，控制一张图片的显示高度<br/>
+		
+	</div>
   
+     <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+
 	<nav>
 		<ul class="pager">
 			<li class="previous">
