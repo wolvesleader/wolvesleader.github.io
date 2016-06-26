@@ -5,163 +5,156 @@
 	<meta http-equiv="X-UA-Compatible" content="chrome=1">
 	<title>wolvesleader</title>
 	<link rel="stylesheet" href="stylesheets/bootstrap.min.css"></head>
-<body >
+	<body >
+<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+Handler消息机制<br/>	
+<pre>
+必须要知道的了
+Handler
+Loop
+MessageQueue
+Message
 
-	
-	
-	 <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+问题在子线程中能不能创建Handler？为什么？
+是怎么和线程关联的，在例如在两个线程中发送消息，怎么知道是那个线程发送的消息
+首先分析我们通过mHandler.sendMessage(message);发送一个消息
+在Handler是怎么接受到的。
+
+主线程中我们之所以能创建Handler是因为android底层在为我们已经创建好了，在启动Activity的时候机已经在主线程中创建了
+主线程入口函数，也是android应用程序的入口
+public static final void main(String[] args) {
+SamplingProfilerIntegration.start();
+
+Process.setArgV0("");
+
+Looper.prepareMainLooper();
+
+//创建ActivityThread对象
+
+ActivityThread thread = new ActivityThread();
+thread.attach(false);
+
+Looper.loop();
+
+if (Process.supportsProcesses()) {
+throw new RuntimeException("Main thread loop unexpectedly exited");
+}
+
+thread.detach();
+String name = (thread.mInitialApplication != null)
+? thread.mInitialApplication.getPackageName()
+: "";
+Slog.i(TAG, "Main thread of " + name + " is now exiting");
+}
 
 
-	
-	<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
-		Handler消息机制<br/>
-		<pre>
-			
-		 必须要知道的了
-		 Handler
-		 Loop
-		 MessageQueue
-		 Message
-		
-		问题在子线程中能不能创建Handler？为什么？
-		 是怎么和线程关联的，在例如在两个线程中发送消息，怎么知道是那个线程发送的消息
-		 首先分析我们通过mHandler.sendMessage(message);发送一个消息
-		 在Handler是怎么接受到的。
-		 
-		 主线程中我们之所以能创建Handler是因为android底层在为我们已经创建好了，在启动Activity的时候机已经在主线程中创建了
-		 主线程入口函数，也是android应用程序的入口
-		    public static final void main(String[] args) {
-		        SamplingProfilerIntegration.start();
+	面试的时候如果问到说一下Handler的消息机制
+	可以这么回答：哦，我之前也看了一下Handler实现的源码，Handler是android为开发者提供的用于线程之间的通讯工具
+	主要涉及到这么几个类 Handler，Loop，MessageQueue，Message，主要是怎么实现的呢？开始讲
+	在android程序启动的时候就为我们创建一个Loop对象，为什么需要创建Loop对象呢？
+	<code>
+		public Handler() {
+		if (FIND_POTENTIAL_LEAKS) {
+		final Class<? extends Handler">" klass=getClass();
+		if((klass.isAnonymousClass() || klass.isMemberClass() || klass.isLocalClass()) &&(klass.getModifiers() & Modifier.STATIC) == 0) {
+			Log.w(TAG, "The following Handler class should be static or leaks might occur: " + klass.getCanonicalName());
+	    }
+    }
 
-		        Process.setArgV0("<pre-initialized>");
 
-		        Looper.prepareMainLooper();
-				
-				//创建ActivityThread对象
-				
-		        ActivityThread thread = new ActivityThread();
-		        thread.attach(false);
+mLooper = Looper.myLooper();
+if (mLooper == null) {
+	throw new RuntimeException(
+		"Can't create handler inside thread that has not called Looper.prepare()");
+}
+mQueue = mLooper.mQueue;
+mCallback = null;
+}
+从上边的远么可以看出，我们一般直接在Activity中通过
+private Handler mHandler = new Handler(){
+	@Override
+	public void handleMessage(Message msg) {
+		super.handleMessage(msg);
+	}
+};
+</code>
+上边这种方式创建Handler但是从67行Handler的构造器可以看出创建Handler的时候必须要一个Loop对象负责会报出异常
+"Can't create handler inside thread that has not called Looper.prepare()
+当然在主线程中我们不必去创建Loop因为系统已经为我们创建好了，如果在子线程中必须要我们手动的去创建Loop对象
+接着怎么把我们发送的消息放在MessageQueue中的在创建Loop的时候Loop中持有一个MessageQueue的引用
 
-		        Looper.loop();
-
-		        if (Process.supportsProcesses()) {
-		            throw new RuntimeException("Main thread loop unexpectedly exited");
-		        }
-
-		        thread.detach();
-		        String name = (thread.mInitialApplication != null)
-		            ? thread.mInitialApplication.getPackageName()
-		            : "<unknown>";
-		        Slog.i(TAG, "Main thread of " + name + " is now exiting");
-		    }
-		    
-		    
-		    面试的时候如果问到说一下Handler的消息机制
-		    可以这么回答：哦，我之前也看了一下Handler实现的源码，Handler是android为开发者提供的用于线程之间的通讯工具
-		   主要涉及到这么几个类 Handler，Loop，MessageQueue，Message，主要是怎么实现的呢？开始讲
-		    在android程序启动的时候就为我们创建一个Loop对象，为什么需要创建Loop对象呢？
-		     public Handler() {
-		        if (FIND_POTENTIAL_LEAKS) {
-		            final Class<? extends Handler> klass = getClass();
-		            if ((klass.isAnonymousClass() || klass.isMemberClass() || klass.isLocalClass()) &&
-		                    (klass.getModifiers() & Modifier.STATIC) == 0) {
-		                Log.w(TAG, "The following Handler class should be static or leaks might occur: " +
-		                    klass.getCanonicalName());
-		            }
-		        }
-
-		        mLooper = Looper.myLooper();
-		        if (mLooper == null) {
-		            throw new RuntimeException(
-		                "Can't create handler inside thread that has not called Looper.prepare()");
-		        }
-		        mQueue = mLooper.mQueue;
-		        mCallback = null;
-		    }
-		    从上边的远么可以看出，我们一般直接在Activity中通过
-			private Handler mHandler = new Handler(){
-			  @Override
-			  public void handleMessage(Message msg) {
-				super.handleMessage(msg);
-			  }
-			};
-		 上边这种方式创建Handler但是从67行Handler的构造器可以看出创建Handler的时候必须要一个Loop对象负责会报出异常
-		 Can't create handler inside thread that has not called Looper.prepare()
-		 当然在主线程中我们不必去创建Loop因为系统已经为我们创建好了，如果在子线程中必须要我们手动的去创建Loop对象
-		接着怎么把我们发送的消息放在MessageQueue中的在创建Loop的时候Loop中持有一个MessageQueue的引用
-
-		Handler从MessageQueue中取出消息
-		    public static final void loop() {
-		        Looper me = myLooper();
-		        MessageQueue queue = me.mQueue;
-		        while (true) {
-		           Message msg = queue.next(); // might block
+Handler从MessageQueue中取出消息
+public static final void loop() {
+	Looper me = myLooper();
+	MessageQueue queue = me.mQueue;
+	while (true) {
+		Message msg = queue.next(); // might block
 		            //if (!me.mRun) {
 		            //    break;
 		            //}
-		            if (msg != null) {
-		                if (msg.target == null) {
+		if (msg != null) {
+			if (msg.target == null) {
 		                    // No target is a magic identifier for the quit message.
-		                    return;
-		                }
-		                if (me.mLogging!= null) me.mLogging.println(
-		                        ">>>>> Dispatching to " + msg.target + " "
-		                        + msg.callback + ": " + msg.what
-		                        );
-		                msg.target.dispatchMessage(msg);
-		                if (me.mLogging!= null) me.mLogging.println(
-		                        "<<<<< Finished to    " + msg.target + " "
-		                        + msg.callback);
-		                msg.recycle();
-		            }
-		        }
-		    }
+				return;
+			}
+			if (me.mLogging!= null) me.mLogging.println(
+				">>>>> Dispatching to " + msg.target + " "
+				+ msg.callback + ": " + msg.what
+				);
+msg.target.dispatchMessage(msg);
+if (me.mLogging!= null) me.mLogging.println(
+	"<<<<< Finished to    " + msg.target + " "
+	+ msg.callback);
+msg.recycle();
+}
+}
+}
 
-		Handler取出消息之后通过dispatchMessage在发送给我们自己实现的接口中代码如下所示：
-		    public void dispatchMessage(Message msg) {
-		        if (msg.callback != null) {
-		            handleCallback(msg);
-		        } else {
-		            if (mCallback != null) {
-		                if (mCallback.handleMessage(msg)) {
-		                    return;
-		                }
-		            }
-		            handleMessage(msg);
-		        }
-		    }
+Handler取出消息之后通过dispatchMessage在发送给我们自己实现的接口中代码如下所示：
+public void dispatchMessage(Message msg) {
+	if (msg.callback != null) {
+		handleCallback(msg);
+	} else {
+		if (mCallback != null) {
+			if (mCallback.handleMessage(msg)) {
+				return;
+			}
+		}
+		handleMessage(msg);
+	}
+}
 
-		 通过handleMessage(msg);发送给了我们实现的消息接口
-		</pre>
+通过handleMessage(msg);发送给了我们实现的消息接口"
 
-		
-	</div>
-  
-     <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+</pre>	
 
 
-  
-	<nav>
-		<ul class="pager">
-			<li class="previous">
-				<a href="index4.html">
-					<span aria-hidden="true">&larr;</span>
-					上一页
-				</a>
-			</li>
-			<li class="next">
-				<a href="index4.html">
-					下一页
-					<span aria-hidden="true">&rarr;</span>
-				</a>
-			</li>
-		</ul>
-	</nav>
+</div>
 
-	<script src="javascripts/jquery-2.1.4.min.js"></script>
-	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-	<script src="javascripts/bootstrap.min.js"></script>
-	<script src="javascripts/scale.fix.js"></script>
+<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+
+<nav>
+	<ul class="pager">
+		<li class="previous">
+			<a href="index4.html">
+				<span aria-hidden="true">&larr;</span>
+				上一页
+			</a>
+		</li>
+		<li class="next">
+			<a href="index6.html">
+				下一页
+				<span aria-hidden="true">&rarr;</span>
+			</a>
+		</li>
+	</ul>
+</nav>
+
+<script src="javascripts/jquery-2.1.4.min.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="javascripts/bootstrap.min.js"></script>
+<script src="javascripts/scale.fix.js"></script>
 
 </body>
 </html>
