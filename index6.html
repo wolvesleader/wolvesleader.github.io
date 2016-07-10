@@ -8,7 +8,310 @@
 	<body >
 <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
 <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+<div>
+	在一个Activity中启动另外一个Activity的时候通过Intent的数据的传递
+</div>
+<div>
+  Intent intent = new Intent(this,TestActiivty.class);
+  intent.putString("test","testValue");
+  startActivity(intent);
+  这个数据是怎么传递到另外的一个Activity中去的，我们通过源码来分析一下<br/>
+  1，先来分析我们存入的键置对放在哪里了？
+  在Intent.java中我们可以通过下边的方法来看
+  <pre>
+public Intent putExtra(String name, String value) {
+    if (mExtras == null) {
+        mExtras = new Bundle();
+    }
+    mExtras.putString(name, value);
+    return this;
+}
+  </pre>
+  分析一下，在该方法中，创建了一个Bundle对象，把传入的键置对存入到了Bundle对象中，那么我们接着到Bundle中查看是怎么存储的，进入到Bundle中发现没有putString("","")这个方法，发现Bundle继承自BaseBundle,在这个类中我们发现了putString("","")
+  <pre>
+  public void putString(@Nullable String key, @Nullable String value) {
+    unparcel();
+    mMap.put(key, value);
+  }
+  </pre>
+  从这个方法中我们明白了，数据时被保存在了ArrayMap集合中
+  但是我们还有一个问题，但是，数据被放入到集合中，在启动的Activity是怎么获取到的呢？
+  数据是怎么被传递到另外的一个Activity中的呢？<br/>
+  2，我们在分析一下startActivity(intent);看看启动Activity的时候，数据是怎么被传递过去的
+  <pre>
+    @Override
+    public void startActivity(Intent intent) {
+        this.startActivity(intent, null);
+    }
+    @Override
+    public void startActivity(Intent intent, @Nullable Bundle options) {
+        if (options != null) {
+            startActivityForResult(intent, -1, options);
+        } else {
+            // Note we want to go through this call for compatibility with
+            // applications that may have overridden the method.
+            startActivityForResult(intent, -1);
+        }
+    }
+  </pre>
+  上边的两个方法是在Activity中的，由于我们没有传入Bundle，所以执行的是startActivityForResult(intent, -1);
+  <pre>
+    public void startActivityForResult(Intent intent, int requestCode) {
+        startActivityForResult(intent, requestCode, null);
+    }
+    public void startActivityForResult(Intent intent, int requestCode, @Nullable Bundle options) {
+        if (mParent == null) {
+            Instrumentation.ActivityResult ar =
+                mInstrumentation.execStartActivity(
+                    this, mMainThread.getApplicationThread(), mToken, this,
+                    intent, requestCode, options);
+            if (ar != null) {
+                mMainThread.sendActivityResult(
+                    mToken, mEmbeddedID, requestCode, ar.getResultCode(),
+                    ar.getResultData());
+            }
+            if (requestCode >= 0) {
+                // If this start is requesting a result, we can avoid making
+                // the activity visible until the result is received.  Setting
+                // this code during onCreate(Bundle savedInstanceState) or onResume() will keep the
+                // activity hidden during this time, to avoid flickering.
+                // This can only be done when a result is requested because
+                // that guarantees we will get information back when the
+                // activity is finished, no matter what happens to it.
+                mStartedActivity = true;
+            }
 
+            cancelInputsAndStartExitTransition(options);
+            // TODO Consider clearing/flushing other event sources and events for child windows.
+        } else {
+            if (options != null) {
+                mParent.startActivityFromChild(this, intent, requestCode, options);
+            } else {
+                // Note we want to go through this method for compatibility with
+                // existing applications that may have overridden it.
+                mParent.startActivityFromChild(this, intent, requestCode);
+            }
+        }
+    }
+  	
+  </pre>
+
+ 进入方法之后我们发现，startActivity最后调用的还是startActivityForResult
+ <pre>
+ 	public ActivityResult execStartActivity(
+            Context who, IBinder contextThread, IBinder token, Activity target,
+            Intent intent, int requestCode, Bundle options, UserHandle user) {
+        IApplicationThread whoThread = (IApplicationThread) contextThread;
+        if (mActivityMonitors != null) {
+            synchronized (mSync) {
+                final int N = mActivityMonitors.size();
+                for (int i=0; i<N; i++) {
+                    final ActivityMonitor am = mActivityMonitors.get(i);
+                    if (am.match(who, null, intent)) {
+                        am.mHits++;
+                        if (am.isBlocking()) {
+                            return requestCode >= 0 ? am.getResult() : null;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        try {
+            intent.migrateExtraStreamToClipData();
+            intent.prepareToLeaveProcess();
+            int result = ActivityManagerNative.getDefault()
+                .startActivityAsUser(whoThread, who.getBasePackageName(), intent,
+                        intent.resolveTypeIfNeeded(who.getContentResolver()),
+                        token, target != null ? target.mEmbeddedID : null,
+                        requestCode, 0, null, options, user.getIdentifier());
+            checkStartActivityResult(result, intent);
+        } catch (RemoteException e) {
+            throw new RuntimeExc
+            eption("Failure from system", e);
+        }
+        return null;
+    }
+ </pre>
+ 我们查看startActivityAsUser的方法可以看到
+ <pre>
+ 	public int startActivityAsUser(IApplicationThread caller, String callingPackage, Intent intent,
+            String resolvedType, IBinder resultTo, String resultWho, int requestCode,
+            int startFlags, ProfilerInfo profilerInfo, Bundle options,
+            int userId) throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        data.writeStrongBinder(caller != null ? caller.asBinder() : null);
+        data.writeString(callingPackage);
+        intent.writeToParcel(data, 0);
+        data.writeString(resolvedType);
+        data.writeStrongBinder(resultTo);
+        data.writeString(resultWho);
+        data.writeInt(requestCode);
+        data.writeInt(startFlags);
+        if (profilerInfo != null) {
+            data.writeInt(1);
+            profilerInfo.writeToParcel(data, Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
+        } else {
+            data.writeInt(0);
+        }
+        if (options != null) {
+            data.writeInt(1);
+            options.writeToParcel(data, 0);
+        } else {
+            data.writeInt(0);
+        }
+        data.writeInt(userId);
+        mRemote.transact(START_ACTIVITY_AS_USER_TRANSACTION, data, reply, 0);
+        reply.readException();
+        int result = reply.readInt();
+        reply.recycle();
+        data.recycle();
+        return result;
+    }
+ </pre>
+ 看到这里之后我发现没有调用的方法了，在网上查了资料，说是通过Binder实现了进程间的通信，使程序进入了ActivityManagerService中的startActivity方法中，但是我还不是很清楚，他是怎么跳转到startActivity方法中的。
+ 在ActivityManagerService中调用的方法如下所示：
+ <pre>
+     @Override
+    public final int startActivity(IApplicationThread caller, String callingPackage,
+            Intent intent, String resolvedType, IBinder resultTo, String resultWho, int requestCode,
+            int startFlags, ProfilerInfo profilerInfo, Bundle options) {
+        return startActivityAsUser(caller, callingPackage, intent, resolvedType, resultTo,
+            resultWho, requestCode, startFlags, profilerInfo, options,
+            UserHandle.getCallingUserId());
+    }
+
+    @Override
+    public final int startActivityAsUser(IApplicationThread caller, String callingPackage,
+            Intent intent, String resolvedType, IBinder resultTo, String resultWho, int requestCode,
+            int startFlags, ProfilerInfo profilerInfo, Bundle options, int userId) {
+        enforceNotIsolatedCaller("startActivity");
+        userId = handleIncomingUser(Binder.getCallingPid(), Binder.getCallingUid(), userId,
+                false, ALLOW_FULL_ONLY, "startActivity", null);
+        // TODO: Switch to user app stacks here.
+        return mStackSupervisor.startActivityMayWait(caller, -1, callingPackage, intent,
+                resolvedType, null, null, resultTo, resultWho, requestCode, startFlags,
+                profilerInfo, null, null, options, false, userId, null, null);
+    }
+ </pre>
+
+ 接着进入了ActivityStack类中进入到了,经过了许多的类之后就到了启动Activity的类ActivityThread类中，在该类中把Intent传递给了新创建的Activity中代码如下所示
+
+ <pre>
+ 	public final class ActivityThread {
+
+	......
+
+	private final Activity performLaunchActivity(ActivityClientRecord r, Intent customIntent) {
+		
+		ActivityInfo aInfo = r.activityInfo;
+		if (r.packageInfo == null) {
+			r.packageInfo = getPackageInfo(aInfo.applicationInfo,
+				Context.CONTEXT_INCLUDE_CODE);
+		}
+
+		ComponentName component = r.intent.getComponent();
+		if (component == null) {
+			component = r.intent.resolveActivity(
+				mInitialApplication.getPackageManager());
+			r.intent.setComponent(component);
+		}
+
+		if (r.activityInfo.targetActivity != null) {
+			component = new ComponentName(r.activityInfo.packageName,
+				r.activityInfo.targetActivity);
+		}
+        <div style="color:red;">
+		Activity activity = null;
+		try {
+			java.lang.ClassLoader cl = r.packageInfo.getClassLoader();
+			activity = mInstrumentation.newActivity(
+				cl, component.getClassName(), r.intent);
+			r.intent.setExtrasClassLoader(cl);
+			if (r.state != null) {
+				r.state.setClassLoader(cl);
+			}
+		} catch (Exception e) {
+			......
+		}
+		</div>
+
+		try {
+			Application app = r.packageInfo.makeApplication(false, mInstrumentation);
+
+			......
+
+			if (activity != null) {
+				ContextImpl appContext = new ContextImpl();
+				appContext.init(r.packageInfo, r.token, this);
+				appContext.setOuterContext(activity);
+				CharSequence title = r.activityInfo.loadLabel(appContext.getPackageManager());
+				Configuration config = new Configuration(mConfiguration);
+				......
+				activity.attach(appContext, this, getInstrumentation(), r.token,
+					r.ident, app, r.intent, r.activityInfo, title, r.parent,
+					r.embeddedID, r.lastNonConfigurationInstance,
+					r.lastNonConfigurationChildInstances, config);
+
+				if (customIntent != null) {
+					activity.mIntent = customIntent;
+				}
+				r.lastNonConfigurationInstance = null;
+				r.lastNonConfigurationChildInstances = null;
+				activity.mStartedActivity = false;
+				int theme = r.activityInfo.getThemeResource();
+				if (theme != 0) {
+					activity.setTheme(theme);
+				}
+
+				activity.mCalled = false;
+				mInstrumentation.callActivityOnCreate(activity, r.state);
+				......
+				r.activity = activity;
+				r.stopped = true;
+				if (!r.activity.mFinished) {
+					activity.performStart();
+					r.stopped = false;
+				}
+				if (!r.activity.mFinished) {
+					if (r.state != null) {
+						mInstrumentation.callActivityOnRestoreInstanceState(activity, r.state);
+					}
+				}
+				if (!r.activity.mFinished) {
+					activity.mCalled = false;
+					mInstrumentation.callActivityOnPostCreate(activity, r.state);
+					if (!activity.mCalled) {
+						throw new SuperNotCalledException(
+							"Activity " + r.intent.getComponent().toShortString() +
+							" did not call through to super.onPostCreate()");
+					}
+				}
+			}
+			r.paused = true;
+
+			mActivities.put(r.token, r);
+
+		} catch (SuperNotCalledException e) {
+			......
+
+		} catch (Exception e) {
+			......
+		}
+
+		return activity;
+	}
+
+	......
+}	
+ </pre>
+
+ 总结：总的来说Activity之间之所以能传递数据，其实就是在启动一个Activity的时候，通过与系列的系统操作，把我们new Intent（）的Intent传递给了
+ 新启动的Activity，在新启动的Activity中我们获取到我们之前创建Intent，然后从新创建的Activity中获取到，在从Intent中的Map集合中获取到我们之前存入的键置对
+
+</div>
 
 
 </div>
@@ -18,13 +321,13 @@
 <nav>
 	<ul class="pager">
 		<li class="previous">
-			<a href="index4.html">
+			<a href="index5.html">
 				<span aria-hidden="true">&larr;</span>
 				上一页
 			</a>
 		</li>
 		<li class="next">
-			<a href="index6.html">
+			<a href="index7.html">
 				下一页
 				<span aria-hidden="true">&rarr;</span>
 			</a>
