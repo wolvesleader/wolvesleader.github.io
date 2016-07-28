@@ -18,6 +18,38 @@
 
 <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
 
+<div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+	
+  Retrifot2中网络请求常用注解接口<br/>
+  1，@GET 表示的是get方式请求网络数据<br/>
+  2，@POST表示的是post方式请求网络数据<br/>
+  3，@Headers头信息参数<br/>
+  4，@Path路径参数，替换url路径中的 "｛" 和 "｝" 所括的部分<br/>
+  5，@Query 查询参数，在url地址中追加类似“page= 1"的字符串，形成提交给服务器端的请求参数<br/>
+  6，@QueryMap 查询参数集合，在url地址中追加类似“type=text&count=30&page=1”的字符串<br/>
+  7，@FromUrlEncoded 对表单域中填写内容进行编码处理，避免乱码<br/>
+  8，@Field 指定form表单域中每一个控件的name及相应数值<br/>
+  9，@FieldMap 表单域集合<br/>
+  10，@Multipart Post提交分块请求，如果上传文件，必须指定Multipart<br/>
+  11，@Part POST请求分块请求<br/>
+  12，@Bosy POST提交分块请求<br/>
+
+  Retrifot2代码实现步骤<br/>
+  1，定义一个接口(封装URL地址和数据请求)<br/>
+  2，实例化Retrifot2<br/>
+  3，通过Retrifot2实例创建接口服务对象<br/>
+  4，接口服务对象调用接口中方法，获得Call方法<br/>
+  5，Call对象执行请求(异步，同步请求)<br/>
+
+
+
+</div>
+
+
+
+
+<div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
+
 <nav>
 	<ul class="pager">
 		<li class="previous">
