@@ -8,8 +8,49 @@
 	<body >
 <div style="margin-top:20px;border-bottom: 1px #8DD4FF dashed ;"></div>
 <div style="font-family:Consolas;font-size:20px;margin-top:10px;">
+ <pre>
+	"<html>
+	<head>
+	</head>
+	<body>
+	</body>
+	"<script type="text/javascript">"
 
+		/**
+			1，解释一下这个是为什么
+			先来说一下，javascript中的对象的类型为什么都是Object类型的
+			javascript中的每个对象都有prototype属性，Javascript中对象的prototype属性的解释是：返回对象类型原型的引用。
+			查看源码可以看到每一个对象的prototype都是这个样子的String.prototype = new Object();
+			这也就是为什么对象的类型都是Object的
+			
+			2，在解释一下为什么 var s = new String();为什么返回的是空串
+			这个是空串的原因是String对象的prototype是new Object()
+			查看Object的源码可以看到Object.prototype.toString = function(){return "";};
+			这个就是为什么new String() 它是一个空串而不是null的原因
+			
+			3，在解释alert(s == "");为什么输出的是true
+			先要明白==比较的是值，不比较类型,"" 是字符串类型的
+			从解释2我们可以知道s的值就是空串，所以他们两者做比较结果就是true
+			
+			4，alert(s === "");为什么输出的是false
+			先要明白===比较的是值，比较类型和值  ""是字符串类型的 s是Object类型的
+			所以它会输出false
+			
+		*/
 
+		var s = new String();
+		alert(typeof (s));//为什么返回的类型是Object
+		alert(s == "");//返回的值是空串比较之后为什么返回的是true;
+		//alert(typeof(""));
+		alert(s === "");//返回的值是空串比较之后为什么返回的值是false;
+		
+		var s1 = new String("a");
+		alert(typeof (s1));
+		alert(s1 == "a");
+		alert(s1 === "a");
+	</script>
+	</html>
+</pre>
 
 </div>
 
@@ -18,13 +59,13 @@
 <nav>
 	<ul class="pager">
 		<li class="previous">
-			<a href="index4.html">
+			<a href="index7.html">
 				<span aria-hidden="true">&larr;</span>
 				上一页
 			</a>
 		</li>
 		<li class="next">
-			<a href="index6.html">
+			<a href="index9.html">
 				下一页
 				<span aria-hidden="true">&rarr;</span>
 			</a>
